@@ -1,9 +1,11 @@
 .wrapper {
-    margin: 10px 200px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
 }
 
-table {
-    float: left;
+h1 {
+    font-size: 1em;
 }
 
 td {
@@ -16,27 +18,24 @@ td {
 
 .xSeat,
 .oSeat {
-    float: left;
+    text-align: center;
     color: blue;
     font-weight: bold;
-    margin: 50px 50px;
-    padding: 10px;
-    height: 170px;
-    width: 20px;
-	border: 2px solid #c2c2c2;
-	cursor: pointer;
+    margin: 5%;
+    padding: 2%;
+    height: fit-content;
+    width: 35px;
+    border: 2px solid #c2c2c2;
+    cursor: pointer;
 }
 
 .notAllowed {
-	color: red;
+    color: red;
     cursor: no-drop;
 }
 
-.gameOver {
-    float: left;
-    margin: 100px 0;
-    animation: mymove 5s infinite;
-    font-size: 40px;
+.gameOverNotification {
+    animation: mymove 3s infinite;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -98,24 +97,34 @@ td {
 }
 
 .header {
+	text-align: center;
     font-weight: bold;
     color: red;
-    margin: 5px 230px;
 }
 
 .winBoard {
     font-weight: bold;
     color: green;
-    margin: 5px 450px;
+    /* margin: 5px 450px; */
 }
 
 button {
-    margin: 20px 450px;
-    padding: 10px;
+    /* margin: 20px 450px; */
+    /* padding: 10px; */
     color: #480861;
     font-weight: bold;
 }
 
 .gameBoard {
-    padding: 10px 0;
+    display: flex;
+}
+
+.gameResultBoard {
+    display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+.winningCell{
+	background-color: bisque;
 }

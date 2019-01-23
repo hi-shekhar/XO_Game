@@ -19,37 +19,41 @@
 			</div>
 			<table border="1" id="crossBox">
 				<tr>
-					<td id="cell11" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="cell12" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="cell13" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="00" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="01" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="02" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
 				</tr>
 				<tr>
-					<td id="cell21" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="cell22" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="cell23" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="10" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="11" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="12" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
 				</tr>
 				<tr>
-					<td id="cell31" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="cell32" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="cell33" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="20" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="21" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
+					<td id="22" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
 				</tr>
 			</table>
-		</div>
-		<div>
 			<div class="oSeat" id="oBox">
 				<h3 id="o1" draggable="true" ondragstart="drag(event)">O</h3>
 				<h3 id="o2" draggable="true" ondragstart="drag(event)">O</h3>
 				<h3 id="o3" draggable="true" ondragstart="drag(event)">O</h3>
 				<h3 id="o4" draggable="true" ondragstart="drag(event)">O</h3>
 			</div>
-			<h1 class="gameOver" id="gameEnd"></h1>
-			<div style="clear:both"></div>
 		</div>
-		<div style="clear:both"></div>
+		<div class="gameResultBoard">
+			<div class="winnerNameBoard">
+				<h1 id="winnerBoard" class="winBoard"></h1>
+			</div>
+			<div class="gameOverNotification">
+				<h1 id="gameEnd"></h1>
+			</div>
+			<div class="playAgain">
+				<button name="playAgain" onclick="again()">PLAY AGAIN</button>
+			</div>
+		</div>
+
 	</div>
-	<div style="clear:both"></div>
-	<button name="playAgain" onclick="again()">PLAY AGAIN</button>
-	<h1 id="winnerBoard" class="winBoard"></h1>
 	<script type="text/javascript" src="app.js"></script>
 </body>
 

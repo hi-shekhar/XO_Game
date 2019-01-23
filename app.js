@@ -64,43 +64,51 @@ function drop(ev, pos) {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('00','01','02');
             }
 
             if (xArray[1][0] == "X" && xArray[1][1] == "X" && xArray[1][2] == "X") {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('10','11','12');
             }
 
             if (xArray[2][0] == "X" && xArray[2][1] == "X" && xArray[2][2] == "X") {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('20','21','22');
             }
             if (xArray[0][0] == "X" && xArray[1][0] == "X" && xArray[2][0] == "X") {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('00','10','20');
             }
             if (xArray[0][1] == "X" && xArray[1][1] == "X" && xArray[2][1] == "X") {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('01','11','21');
             }
             if (xArray[0][2] == "X" && xArray[1][2] == "X" && xArray[2][2] == "X") {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('02','12','22');
             }
             if (xArray[0][0] == "X" && xArray[1][1] == "X" && xArray[2][2] == "X") {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('00','11','22');
             }
             if (xArray[0][2] == "X" && xArray[1][1] == "X" && xArray[2][0] == "X") {
                 winnerBoard.innerHTML = "X WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('02','11','20');
             }
 
         }
@@ -123,41 +131,49 @@ function drop(ev, pos) {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('00','01','02');
             }
             if (oArray[1][0] == "O" && oArray[1][1] == "O" && oArray[1][2] == "O") {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('10','11','12');
             }
             if (oArray[2][0] == "O" && oArray[2][1] == "O" && oArray[2][2] == "O") {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('20','21','22');
             }
             if (oArray[0][0] == "O" && oArray[1][0] == "O" && oArray[2][0] == "O") {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('00','10','20');
             }
             if (oArray[0][1] == "O" && oArray[1][1] == "O" && oArray[2][1] == "O") {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('01','11','21');
             }
             if (oArray[0][2] == "O" && oArray[1][2] == "O" && oArray[2][2] == "O") {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('02','12','22');
             }
             if (oArray[0][0] == "O" && oArray[1][1] == "O" && oArray[2][2] == "O") {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('00','11','22');
             }
             if (oArray[0][2] == "O" && oArray[1][1] == "O" && oArray[2][0] == "O") {
                 winnerBoard.innerHTML = "O WIN";
                 gameEnd.innerHTML = "GAME OVER";
                 flag = 1;
+                this.colorWinningCell('02','11','20');
             }
 
         }
@@ -176,4 +192,10 @@ function drop(ev, pos) {
 // Again Reload game
 function again() {
     location.reload();
+}
+
+function colorWinningCell(cell1,cell2,cell3){
+    document.getElementById(cell1).classList.add("winningCell");
+    document.getElementById(cell2).classList.add("winningCell");
+    document.getElementById(cell3).classList.add("winningCell");
 }

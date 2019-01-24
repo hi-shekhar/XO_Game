@@ -1,7 +1,6 @@
 
 var flag = 0; // flag for win/loss
 var step = 0; // No. of steps to complete game Max= 8
-
 // for three dimensional array
 var xArray = new Array(3);
 for (let ind = 0; ind < 3; ind++) {
@@ -17,16 +16,24 @@ var oxBox = document.getElementById("crossBox"); //game  board on which 'X' and 
 var winnerBoard = document.getElementById("winnerBoard"); // Show the Game winner name / Draw 
 var gameEnd = document.getElementById("gameEnd"); // Show Game end
 
-
+/**
+ * Start drag evebt
+ */
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);   //data type is "text" and the value is the id of the draggable element
 }
 
+/**
+ * To allow a drop,  the default handling of the element is prevented.
+ */
 function allowDrop(ev) {
     if (!flag)
-        ev.preventDefault(); //To allow a drop,  the default handling of the element is prevented.
+        ev.preventDefault();
 }
 
+/**
+ *  Event when element is dropped
+ */
 function drop(ev, pos) {
 
     let i = pos.parentNode.rowIndex;
@@ -36,146 +43,55 @@ function drop(ev, pos) {
 
     ev.preventDefault();  //to prevent the browser default handling of the data
 
+    // Check if the dropped area containe any element or not
     if (oxBox.rows[i].cells[j].innerHTML != "X" && oxBox.rows[i].cells[j].innerHTML != "O") {
-
-        data = ev.dataTransfer.getData("text");  //This(= dataTransfer.getData("text")) method will return any data that was set to the same type in the setData() method
+        //This(= dataTransfer.getData("text")) method will return any data that was set to the same type in the setData() method
+        data = ev.dataTransfer.getData("text");
         ev.target.appendChild(document.getElementById(data));
 
         element = document.getElementById(data).innerHTML;
         oxBox.rows[i].cells[j].innerHTML = element;
         step++;
+        // update inputX and inputO with number of 'X' and 'O' remaining in xBox and oBox 
+        inputX = document.getElementById("xBox").getElementsByTagName('h3');
+        inputO = document.getElementById("oBox").getElementsByTagName('h3');
 
         if (element == "X") {
-            // condition for 'X' win
-            inputX = document.getElementById("xBox").getElementsByTagName('h3');
             // disable drag event in xBox
             for (let ix = 0; ix < inputX.length; ix++) {
                 document.getElementById("xBox").classList.add("notAllowed");
                 inputX[ix].draggable = false;
             }
             // Enable drag event in oBox
-            inputO = document.getElementById("oBox").getElementsByTagName('h3');
             for (let io = 0; io < inputO.length; io++) {
                 document.getElementById("oBox").classList.remove("notAllowed");
                 inputO[io].draggable = true;
             }
             xArray[i][j] = element;
-            if (xArray[0][0] == "X" && xArray[0][1] == "X" && xArray[0][2] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('00','01','02');
+            // id step > 4 then only check for win condition
+            if (step > 4) {
+                let moves = this.numberOfMoveRequired(i, j);
+                this.checkForWinCondition(moves, xArray, xArray[i][j], i, j);
             }
-
-            if (xArray[1][0] == "X" && xArray[1][1] == "X" && xArray[1][2] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('10','11','12');
-            }
-
-            if (xArray[2][0] == "X" && xArray[2][1] == "X" && xArray[2][2] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('20','21','22');
-            }
-            if (xArray[0][0] == "X" && xArray[1][0] == "X" && xArray[2][0] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('00','10','20');
-            }
-            if (xArray[0][1] == "X" && xArray[1][1] == "X" && xArray[2][1] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('01','11','21');
-            }
-            if (xArray[0][2] == "X" && xArray[1][2] == "X" && xArray[2][2] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('02','12','22');
-            }
-            if (xArray[0][0] == "X" && xArray[1][1] == "X" && xArray[2][2] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('00','11','22');
-            }
-            if (xArray[0][2] == "X" && xArray[1][1] == "X" && xArray[2][0] == "X") {
-                winnerBoard.innerHTML = "X WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('02','11','20');
-            }
-
         }
+
         else {
-            // condition for 'O' win
-            inputO = document.getElementById("oBox").getElementsByTagName('h3');
             // disable drag event in oBox
             for (let io = 0; io < inputO.length; io++) {
                 document.getElementById("oBox").classList.add("notAllowed");
                 inputO[io].draggable = false;
             }
-            // Enaable drag event in xBox
-            inputX = document.getElementById("xBox").getElementsByTagName('h3');
+            // Enable drag event in xBox
             for (let ix = 0; ix < inputX.length; ix++) {
                 document.getElementById("xBox").classList.remove("notAllowed");
                 inputX[ix].draggable = true;
             }
             oArray[i][j] = element;
-            if (oArray[0][0] == "O" && oArray[0][1] == "O" && oArray[0][2] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('00','01','02');
+            // id step > 4 then only check for win condition
+            if (step > 4) {
+                let moves = this.numberOfMoveRequired(i, j);
+                this.checkForWinCondition(moves, oArray, oArray[i][j], i, j);
             }
-            if (oArray[1][0] == "O" && oArray[1][1] == "O" && oArray[1][2] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('10','11','12');
-            }
-            if (oArray[2][0] == "O" && oArray[2][1] == "O" && oArray[2][2] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('20','21','22');
-            }
-            if (oArray[0][0] == "O" && oArray[1][0] == "O" && oArray[2][0] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('00','10','20');
-            }
-            if (oArray[0][1] == "O" && oArray[1][1] == "O" && oArray[2][1] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('01','11','21');
-            }
-            if (oArray[0][2] == "O" && oArray[1][2] == "O" && oArray[2][2] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('02','12','22');
-            }
-            if (oArray[0][0] == "O" && oArray[1][1] == "O" && oArray[2][2] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('00','11','22');
-            }
-            if (oArray[0][2] == "O" && oArray[1][1] == "O" && oArray[2][0] == "O") {
-                winnerBoard.innerHTML = "O WIN";
-                gameEnd.innerHTML = "GAME OVER";
-                flag = 1;
-                this.colorWinningCell('02','11','20');
-            }
-
         }
     }
     else {
@@ -189,13 +105,71 @@ function drop(ev, pos) {
     }
 }
 
-// Again Reload game
-function again() {
-    location.reload();
+/**
+ * Check how many direction(LeftRight, UpDown, Diagonal) we have to move to check win condition
+ */
+function numberOfMoveRequired(row, col) {
+    if (row === col) {
+        return 4;
+    } else if ((row + col) - 3 == 2 || (row + col) - 3 == 0) {
+        return 2;
+    } else {
+        // (row + col) - 3 == 3 || (row + col) - 3 == 1
+        return 3;
+    }
 }
 
-function colorWinningCell(cell1,cell2,cell3){
+/**
+ * On basis of move value scan the 3X3 Array for win condition
+ */
+function checkForWinCondition(mov, selectedArray, selectedElement, row, col) {
+    let cell1, cell2, cell3;
+    if (mov >= 2) {
+        if (selectedArray[row][col == 0 ? 2 : Math.abs(col - 1)] == selectedElement && selectedArray[row][col] == selectedElement && selectedArray[row][col == 2 ? 0 : (col + 1) > 2 ? 0 : (col + 1)] == selectedElement) {
+            cell1 = '' + row + '' + (col == 0 ? 2 : Math.abs(col - 1));
+            cell2 = '' + row + '' + col;
+            cell3 = '' + row + '' + (col == 2 ? 0 : (col + 1) > 2 ? 0 : (col + 1));
+            this.xoWinnerAndHiglightCells(cell1, cell2, cell3, selectedElement);
+        }
+
+        if (selectedArray[row == 0 ? 2 : Math.abs(row - 1)][col] == selectedElement && selectedArray[row][col] == selectedElement && selectedArray[row == 2 ? 0 : (row + 1) > 2 ? 0 : (row + 1)][col] == selectedElement) {
+            cell1 = '' + (row == 0 ? 2 : Math.abs(row - 1)) + '' + col;
+            cell2 = '' + row + '' + col;
+            cell3 = '' + (row == 2 ? 0 : (row + 1) > 2 ? 0 : (row + 1)) + '' + col;
+            this.xoWinnerAndHiglightCells(cell1, cell2, cell3, selectedElement);
+        }
+        if (mov >= 3) {
+            if (selectedArray[row == 0 ? 2 : Math.abs(row - 1)][col == 0 ? 2 : Math.abs(col - 1)] == selectedElement && selectedArray[row][col] == selectedElement && selectedArray[row == 2 ? 0 : (row + 1) > 2 ? 0 : (row + 1)][col == 2 ? 0 : (col + 1) > 2 ? 0 : (col + 1)] == selectedElement) {
+                cell1 = '' + (row == 0 ? 2 : Math.abs(row - 1)) + '' + (col == 0 ? 2 : Math.abs(col - 1));
+                cell2 = '' + row + '' + col;
+                cell3 = '' + (row == 2 ? 0 : (row + 1) > 2 ? 0 : (row + 1)) + '' + (col == 2 ? 0 : (col + 1) > 2 ? 0 : (col + 1));
+                this.xoWinnerAndHiglightCells(cell1, cell2, cell3, selectedElement);
+            }
+            if (selectedArray[row == 0 ? 2 : Math.abs(row - 1)][col == 2 ? 0 : (col + 1) > 2 ? 0 : (col + 1)] == selectedElement && selectedArray[row][col] == selectedElement && selectedArray[row == 2 ? 0 : (row + 1) > 2 ? 0 : (row + 1)][col == 0 ? 2 : Math.abs(col - 1)] == selectedElement) {
+                cell1 = '' + (row == 0 ? 2 : Math.abs(row - 1)) + '' + (col == 0 ? 2 : Math.abs(col - 1));
+                cell2 = '' + row + '' + col;
+                cell3 = '' + (row == 2 ? 0 : (row + 1) > 2 ? 0 : (row + 1)) + '' + (col == 0 ? 2 : Math.abs(col - 1));
+                this.xoWinnerAndHiglightCells(cell1, cell2, cell3, selectedElement);
+            }
+        }
+    }
+}
+
+/**
+ * After Win highlight winning position, Dispally Winner and  Game Over notification 
+ */
+function xoWinnerAndHiglightCells(cell1, cell2, cell3, selectedElement) {
+    winnerBoard.innerHTML = `${selectedElement} WIN`;
+    gameEnd.innerHTML = "GAME OVER";
+    flag = 1;
     document.getElementById(cell1).classList.add("winningCell");
     document.getElementById(cell2).classList.add("winningCell");
     document.getElementById(cell3).classList.add("winningCell");
+}
+
+/**
+ * Again Reload game
+ */
+function again() {
+    location.reload();
 }

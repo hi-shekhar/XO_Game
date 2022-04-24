@@ -13,10 +13,10 @@
 2. Start Drag and Drop
 
 ## Game Board
-![Game Board](images\home.png)
+![Game Board](images/home.png)
 
 ## Winner
-![Game Board](images\winner-board.png)
+![Game Board](images/winner-board.png)
 
 ## Draw
-![Game Board](images\draw.png)
+![Game Board](images/draw.png)

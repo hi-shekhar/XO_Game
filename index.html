@@ -1,60 +1,49 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>XO</title>
+    <meta chraset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
 
-<head>
-	<title>XO</title>
-	<meta chraset="utf-8">
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-
-<body>
-	<div class="wrapper">
-		<h1 class="header">XO GAME</h1>
-		<div class="gameBoard">
-			<div class="xSeat" id="xBox">
-				<h3 id="x1" draggable="true" ondragstart="drag(event)">X</h3>
-				<h3 id="x2" draggable="true" ondragstart="drag(event)">X</h3>
-				<h3 id="x3" draggable="true" ondragstart="drag(event)">X</h3>
-				<h3 id="x4" draggable="true" ondragstart="drag(event)">X</h3>
-			</div>
-			<table border="1" id="crossBox">
-				<tr>
-					<td id="00" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="01" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="02" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-				</tr>
-				<tr>
-					<td id="10" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="11" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="12" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-				</tr>
-				<tr>
-					<td id="20" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="21" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-					<td id="22" ondrop="drop(event,this)" ondragover="allowDrop(event)"></td>
-				</tr>
-			</table>
-			<div class="oSeat" id="oBox">
-				<h3 id="o1" draggable="true" ondragstart="drag(event)">O</h3>
-				<h3 id="o2" draggable="true" ondragstart="drag(event)">O</h3>
-				<h3 id="o3" draggable="true" ondragstart="drag(event)">O</h3>
-				<h3 id="o4" draggable="true" ondragstart="drag(event)">O</h3>
-			</div>
-		</div>
-		<div class="gameResultBoard">
-			<div class="winnerNameBoard">
-				<h1 id="winnerBoard" class="winBoard"></h1>
-			</div>
-			<div class="gameOverNotification">
-				<h1 id="gameEnd"></h1>
-			</div>
-			<div class="playAgain">
-				<button name="playAgain" onclick="again()">PLAY AGAIN</button>
-			</div>
-		</div>
-
-	</div>
-	<script type="text/javascript" src="app.js"></script>
-</body>
-
+  <body>
+    <div class="wrapper">
+      <h1 class="header">XO Game</h1>
+      <!-- <div class="board-size">
+        <form>
+          <label>Board Size</label>
+          <label class="radio-inline">
+            <input type="radio" name="board-size" value="3" checked>3
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="board-size" value="4">4
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="board-size" value="5">5
+          </label>
+        </form>
+      </div> -->
+      <div class="gameBoard">
+        <div class="marks-reserve" id="player1-box">
+          <h3 id="player1-logo">P1</h3>
+        </div>
+        <table border="1" id="square-grid"></table>
+        <div class="marks-reserve" id="player2-box">
+          <h3 id="player2-logo">P2</h3>
+        </div>
+      </div>
+      <div class="gameResultBoard">
+        <div class="winnerNameBoard">
+          <h1 id="winnerBoard" class="winBoard"></h1>
+        </div>
+        <div class="gameOverNotification">
+          <h1 id="gameEnd"></h1>
+        </div>
+        <div class="playAgain">
+          <button name="playAgain">PLAY AGAIN</button>
+        </div>
+      </div>
+    </div>
+    <script src="app.js" type="module"></script>
+  </body>
 </html>

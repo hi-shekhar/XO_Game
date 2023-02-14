@@ -1,7 +1,7 @@
 .wrapper {
-    width: 500px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 h1 {
@@ -16,8 +16,7 @@ td {
     text-align: center;
 }
 
-.xSeat,
-.oSeat {
+.marks-reserve {
     text-align: center;
     color: blue;
     font-weight: bold;
@@ -27,6 +26,14 @@ td {
     width: 35px;
     border: 2px solid #c2c2c2;
     cursor: pointer;
+}
+
+#player1-logo {
+    background-color:coral
+}
+
+#player2-logo {
+    background-color:magenta;
 }
 
 .notAllowed {
@@ -45,22 +52,27 @@ td {
         color: red;
         font-weight: bold;
     }
+
     20% {
         color: green;
         font-weight: bold;
     }
+
     40% {
         color: blue;
         font-weight: bold;
     }
+
     60% {
         color: #083F61;
         font-weight: bold;
     }
+
     80% {
         color: #480861;
         font-weight: bold;
     }
+
     100% {
         color: #800000;
         font-weight: bold;
@@ -74,22 +86,27 @@ td {
         color: red;
         font-weight: bold;
     }
+
     20% {
         color: green;
         font-weight: bold;
     }
+
     40% {
         color: blue;
         font-weight: bold;
     }
+
     60% {
         color: #083F61;
         font-weight: bold;
     }
+
     80% {
         color: #480861;
         font-weight: bold;
     }
+
     100% {
         color: #800000;
         font-weight: bold;
@@ -97,7 +114,7 @@ td {
 }
 
 .header {
-	text-align: center;
+    text-align: center;
     font-weight: bold;
     color: red;
 }
@@ -117,14 +134,15 @@ button {
 
 .gameBoard {
     display: flex;
+    justify-content: center;
 }
 
 .gameResultBoard {
     display: flex;
-	flex-direction: column;
-	text-align: center;
+    flex-direction: column;
+    text-align: center;
 }
 
-.winningCell{
-	background-color: bisque;
+.winningCell {
+    background-color: bisque;
 }

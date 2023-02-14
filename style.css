@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .wrapper {
     display: flex;
     flex-direction: column;
@@ -8,6 +12,10 @@ h1 {
     font-size: 1em;
 }
 
+#square-grid {
+    min-width: 308px;
+}
+
 td {
     width: 100px;
     height: 100px;
@@ -16,24 +24,65 @@ td {
     text-align: center;
 }
 
+ul {
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
 .marks-reserve {
     text-align: center;
     color: blue;
     font-weight: bold;
     margin: 5%;
-    padding: 2%;
     height: fit-content;
-    width: 35px;
+    width: 5%;
+    min-width: 35px;
     border: 2px solid #c2c2c2;
     cursor: pointer;
 }
 
+
+.marks-reserve li {
+    padding: 20%;
+    border-top: 1px solid black;
+    min-width: 30px;
+}
+
+.marks-reserve li:last-child {
+    border-bottom: 1px solid black;
+    border-bottom: 0;
+}
+
 #player1-logo {
-    background-color:coral
+    background-color: coral;
+    color: white
 }
 
 #player2-logo {
-    background-color:magenta;
+    background-color: magenta;
+    color: white;
+}
+
+.active-player {
+    animation: blink 1.5s infinite;
+    animation-fill-mode: both;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0
+    }
+
+    50% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
+    }
 }
 
 .notAllowed {

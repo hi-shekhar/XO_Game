@@ -33,7 +33,7 @@ export default class Board {
     }
 
     positionMarks(player, id, playerNumber) {
-        const element = document.createElement('h3');
+        const element = document.createElement('li');
         element.setAttribute('draggable', true);
         element.setAttribute('id', `${player.mark}${id}`);
         element.innerHTML = player.mark;
@@ -48,13 +48,10 @@ export default class Board {
     }
 
     doDragover(event) {
-        event.preventDefault();
+        if (!(this.player1.win || this.player1.win)) {
+            event.preventDefault();
+        }
     }
-
-    // allowDrop(event) {
-    //     // event.preventDefault();
-    //     console.log("drag enter")
-    // }
 
     doDrop(event) {
         const dropzone = event.target;
@@ -72,11 +69,14 @@ export default class Board {
 
     gameProgressEvaluate(rval, playerNumber) {
         if (rval.length > 0) {
+            console.log("rval > 0", rval, this.moves, playerNumber);
             this.endGame(rval, playerNumber);
         } else if (this.moves === 0) {
+            console.log("move == 0", rval, this.moves, playerNumber);
             this.endGame(rval, playerNumber);
         }
         else {
+            console.log("switch", rval, this.moves, playerNumber);
             this.switchPlayer(playerNumber)
         }
     }
@@ -94,11 +94,15 @@ export default class Board {
     }
 
     setMarksDragState() {
-        document.querySelectorAll('#player1-box > h3:not(#player1-logo)').forEach(elem => {
-            elem.setAttribute('draggable', this.player1.toMove)
+        document.querySelectorAll('#player1-box > li:not(#player1-logo)').forEach(elem => {
+            elem.setAttribute('draggable', this.player1.toMove);
+            this.player1.toMove ? elem.classList.remove('notAllowed') : elem.classList.add('notAllowed');
+            this.player1.toMove ? elem.parentElement.firstElementChild.classList.add('active-player') : elem.parentElement.firstElementChild.classList.remove('active-player');
         })
-        document.querySelectorAll('#player2-box > h3:not(#player2-logo)').forEach(elem => {
+        document.querySelectorAll('#player2-box > li:not(#player2-logo)').forEach(elem => {
             elem.setAttribute('draggable', this.player2.toMove)
+            this.player2.toMove ? elem.classList.remove('notAllowed') : elem.classList.add('notAllowed');
+            this.player2.toMove ? elem.parentElement.firstElementChild.classList.add('active-player') : elem.parentElement.firstElementChild.classList.remove('active-player');
         })
     }
 
@@ -122,8 +126,6 @@ export default class Board {
             let cell = this.grid.rows[i].cells[col].firstElementChild;
             if (cell?.innerHTML === element) {
                 columnMatched.push(cell)
-            } else {
-                columnMatched = [];
             }
         }
 
@@ -136,8 +138,6 @@ export default class Board {
             let cell = this.grid.rows[i].cells[i].firstElementChild;
             if (cell?.innerHTML === element) {
                 diagonalMatched.push(cell)
-            } else {
-                diagonalMatched = [];
             }
         }
 
@@ -149,8 +149,6 @@ export default class Board {
             let cell = this.grid.rows[i].cells[j].firstElementChild;
             if (cell?.innerHTML === element) {
                 antidiagonalMatched.push(cell)
-            } else {
-                antidiagonalMatched = [];
             }
         }
 
@@ -161,55 +159,22 @@ export default class Board {
         return Array.from(new Set([...rowMatched, ...columnMatched, ...diagonalMatched, ...antidiagonalMatched]));
     }
 
-
-    matchedCells(condition, row, col, element) {
-        const cells = [];
-        if (condition !== 'antiDiagonal') {
-            let i = 0;
-        } else {
-            for (let i = 0, j = this.gridSize - 1; i < this.gridSize; i++, j--) {
-                let cell = this.grid.rows[i].cells[j].firstElementChild;
-                if (cell?.innerHTML === element) {
-                    antidiagonalMatched.push(cell)
-                } else {
-                    break;
-                }
-            }
-        }
-
-        function cellvalue() {
-            let val;
-            if (condition === 'row') {
-                val = this.grid.rows[row].cells[i].firstElementChild;
-            } else if (condition === 'column') {
-                val = this.grid.rows[i].cells[col].firstElementChild;
-            } else {
-                val = this.grid.rows[i].cells[i].firstElementChild;
-            }
-            for (let i = 0; i < this.gridSize; i++) {
-                if (cell?.innerHTML === element) {
-                    cells.push(cell)
-                } else {
-                    break;
-                }
-            }
-        }
-        return cells;
-    }
-
     /**
  * After Win highlight winning position, Dispally Winner and  Game Over notification 
  */
     endGame(cells, playerNumber) {
         const winnerBoard = document.getElementById("winnerBoard"); // Show the Game winner name / Draw 
         const gameEnd = document.getElementById("gameEnd"); // Show Game end
+        this.setMarksDragState();
         if (cells.length) {
             for (let i = 0; i < cells.length; i++) {
                 document.getElementById(cells[i].id).parentNode.classList.add("winningCell");
-                if(playerNumber === '1') {
-                    this.player1.win = trued;
+                if (playerNumber === '1') {
+                    this.player1.win = true;
+                    this.player1.toMove = false;
                 } else {
                     this.player2.win = true;
+                    this.player2.toMove = false;
                 }
                 winnerBoard.innerHTML = `P${playerNumber} WINS`;
                 gameEnd.innerHTML = "GAME OVER";
@@ -218,6 +183,8 @@ export default class Board {
             winnerBoard.innerHTML = "NO ONE WIN";
             gameEnd.innerHTML = "GAME OVER";
         }
+
+        this.setMarksDragState();
 
     }
 

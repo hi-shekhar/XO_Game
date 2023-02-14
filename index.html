@@ -24,13 +24,15 @@
         </form>
       </div> -->
       <div class="gameBoard">
-        <div class="marks-reserve" id="player1-box">
-          <h3 id="player1-logo">P1</h3>
-        </div>
+        <!-- <div class="marks-reserve" id="player1-box"> -->
+        <ul class="marks-reserve" id="player1-box">
+          <li id="player1-logo" class="active-player">P1</li>
+        </ul>
+        <!-- </div> -->
         <table border="1" id="square-grid"></table>
-        <div class="marks-reserve" id="player2-box">
-          <h3 id="player2-logo">P2</h3>
-        </div>
+        <ul class="marks-reserve" id="player2-box">
+          <li id="player2-logo" class="active-player">P2</li>
+        </ul>
       </div>
       <div class="gameResultBoard">
         <div class="winnerNameBoard">
@@ -44,6 +46,7 @@
         </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js" type="module"></script>
     <script src="app.js" type="module"></script>
   </body>
 </html>

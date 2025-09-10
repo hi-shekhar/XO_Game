@@ -1,192 +1,144 @@
+/**
+ * Manages the game board's state and UI.
+ * Handles user interactions via drag-and-drop events.
+ */
 export default class Board {
-    grid = null
-    constructor(size, player1, player2) {
+    /**
+     * Initializes the board with the given size and player information.
+     * @param {number} size - The size of the grid (e.g., 3 for a 3x3 board).
+     * @param {function} onMoveCallback - A callback to notify the game manager of a move.
+     * @param {Player[]} players - The list of player objects.
+     */
+    constructor(size, onMoveCallback, players) {
         this.gridSize = size;
-        this.moves = size * size;
-        this.player1 = player1;
-        this.player2 = player2;
-        this.initializeMarks();
+        this.onMoveCallback = onMoveCallback;
+        this.players = players;
+        this.grid = null;
+        this.boardState = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(''));
+        this.moves = 0;
         this.initializeSquareGrid();
+        this.initializeMarks();
     }
 
+    /* Creates and positions the draggable marks for each player. */
     initializeMarks() {
-        let i = 0
-        while (i < this.gridSize + 2) {
-            this.positionMarks(this.player1, i + 1, 1);
-            this.positionMarks(this.player2, i + 1, 2);
+        const marksNeeded = Math.ceil((this.gridSize * this.gridSize) / 2);
+        let i = 0;
+        while (i < marksNeeded) {
+            this.positionMark(this.players[0], i + 1, 1);
+            this.positionMark(this.players[1], i + 1, 2);
             i++;
         }
     }
 
-    initializeSquareGrid() {
-        this.grid = document.getElementById('square-grid');
-        for (let r = 0; r < this.gridSize; r++) {
-            const row = this.grid.insertRow(r);
-            for (let c = 0; c < this.gridSize; c++) {
-                const cell = row.insertCell(c);
-                cell.setAttribute('id', `${r}${c}`);
-                cell.addEventListener('dragover', this.doDragover.bind(this));
-                // cell.addEventListener('dragenter', this.allowDrop.bind(this));
-                cell.addEventListener('drop', this.doDrop.bind(this));
-            }
-        }
-    }
-
-    positionMarks(player, id, playerNumber) {
+    /**
+     * Creates a single draggable mark element.
+     * @param {Player} player - The player object.
+     * @param {number} id - The unique ID for the mark.
+     * @param {number} playerNumber - The player's number (1 or 2).
+     */
+    positionMark(player, id, playerNumber) {
         const element = document.createElement('li');
         element.setAttribute('draggable', true);
         element.setAttribute('id', `${player.mark}${id}`);
         element.innerHTML = player.mark;
         document.getElementById(`player${playerNumber}-box`).append(element);
-        document.getElementById(`${player.mark}${id}`).addEventListener('dragstart', this.drag.bind(this, playerNumber))
+        element.addEventListener('dragstart', this.drag.bind(this, playerNumber));
     }
 
+    /* Renders the HTML grid for the game board. */
+    initializeSquareGrid() {
+        this.grid = document.getElementById('square-grid');
+        this.grid.innerHTML = '';
+        for (let r = 0; r < this.gridSize; r++) {
+            const row = this.grid.insertRow(r);
+            for (let c = 0; c < this.gridSize; c++) {
+                const cell = row.insertCell(c);
+                cell.setAttribute('id', `cell-${r}-${c}`);
+                cell.addEventListener('dragover', this.doDragover.bind(this));
+                cell.addEventListener('drop', this.doDrop.bind(this, r, c));
+            }
+        }
+    }
 
+    /**
+     * Handles the `dragstart` event, setting the data to be transferred.
+     * @param {number} playerNumber - The player's number (1 or 2).
+     * @param {Event} event - The drag event.
+     */
     drag(playerNumber, event) {
-        event.dataTransfer.setData('text', event.target.id);   //data type is 'text' and the value is the id of the draggable element
-        event.dataTransfer.setData('player-number', playerNumber);
-    }
-
-    doDragover(event) {
-        if (!(this.player1.win || this.player1.win)) {
+        const player = this.players[playerNumber - 1];
+        if (player.isActive) {
+            event.dataTransfer.setData('text/plain', event.target.id);
+            event.dataTransfer.setData('player-number', playerNumber);
+            event.dataTransfer.setData('mark', player.mark);
+        } else {
             event.preventDefault();
         }
     }
 
-    doDrop(event) {
-        const dropzone = event.target;
-        if (!Boolean(dropzone.innerHTML)) {
-            this.moves--;
-            const id = event.dataTransfer.getData('text');
-            const playerNumber = event.dataTransfer.getData('player-number');
-            const draggedElement = document.getElementById(id);
-            dropzone.appendChild(draggedElement);
-            event.dataTransfer.clearData();
-            const rval = this.checkForWinCondition(event.target.parentNode.rowIndex, event.target.cellIndex, draggedElement.innerHTML);
-            this.gameProgressEvaluate(rval, playerNumber);
+    /**
+     * Handles the `dragover` event, allowing a drop on empty cells.
+     * @param {Event} event - The drag event.
+     */
+    doDragover(event) {
+        const cell = event.target;
+        if (cell.tagName === 'TD' && cell.innerHTML === '') {
+            event.preventDefault();
         }
-    }
-
-    gameProgressEvaluate(rval, playerNumber) {
-        if (rval.length > 0) {
-            console.log("rval > 0", rval, this.moves, playerNumber);
-            this.endGame(rval, playerNumber);
-        } else if (this.moves === 0) {
-            console.log("move == 0", rval, this.moves, playerNumber);
-            this.endGame(rval, playerNumber);
-        }
-        else {
-            console.log("switch", rval, this.moves, playerNumber);
-            this.switchPlayer(playerNumber)
-        }
-    }
-
-    switchPlayer(playerNumber) {
-        if (playerNumber == 1) {
-            this.player1.toMove = false;
-            this.player2.toMove = true;
-        } else {
-            this.player1.toMove = true;
-            this.player2.toMove = false;
-        }
-
-        this.setMarksDragState();
-    }
-
-    setMarksDragState() {
-        document.querySelectorAll('#player1-box > li:not(#player1-logo)').forEach(elem => {
-            elem.setAttribute('draggable', this.player1.toMove);
-            this.player1.toMove ? elem.classList.remove('notAllowed') : elem.classList.add('notAllowed');
-            this.player1.toMove ? elem.parentElement.firstElementChild.classList.add('active-player') : elem.parentElement.firstElementChild.classList.remove('active-player');
-        })
-        document.querySelectorAll('#player2-box > li:not(#player2-logo)').forEach(elem => {
-            elem.setAttribute('draggable', this.player2.toMove)
-            this.player2.toMove ? elem.classList.remove('notAllowed') : elem.classList.add('notAllowed');
-            this.player2.toMove ? elem.parentElement.firstElementChild.classList.add('active-player') : elem.parentElement.firstElementChild.classList.remove('active-player');
-        })
-    }
-
-    checkForWinCondition(row, col, element) {
-        let rowMatched = [];
-        let columnMatched = [];
-        let diagonalMatched = [];
-        let antidiagonalMatched = [];
-
-        for (let i = 0; i < this.gridSize; i++) {
-            let cell = this.grid.rows[row].cells[i].firstElementChild;
-            if (cell?.innerHTML === element) {
-                rowMatched.push(cell)
-            }
-        }
-        if (rowMatched.length !== this.gridSize) {
-            rowMatched = [];
-        }
-
-        for (let i = 0; i < this.gridSize; i++) {
-            let cell = this.grid.rows[i].cells[col].firstElementChild;
-            if (cell?.innerHTML === element) {
-                columnMatched.push(cell)
-            }
-        }
-
-
-        if (columnMatched.length !== this.gridSize) {
-            columnMatched = [];
-        }
-
-        for (let i = 0; i < this.gridSize; i++) {
-            let cell = this.grid.rows[i].cells[i].firstElementChild;
-            if (cell?.innerHTML === element) {
-                diagonalMatched.push(cell)
-            }
-        }
-
-        if (diagonalMatched.length !== this.gridSize) {
-            diagonalMatched = [];
-        }
-
-        for (let i = 0, j = this.gridSize - 1; i < this.gridSize; i++, j--) {
-            let cell = this.grid.rows[i].cells[j].firstElementChild;
-            if (cell?.innerHTML === element) {
-                antidiagonalMatched.push(cell)
-            }
-        }
-
-        if (antidiagonalMatched.length !== this.gridSize) {
-            antidiagonalMatched = [];
-        }
-
-        return Array.from(new Set([...rowMatched, ...columnMatched, ...diagonalMatched, ...antidiagonalMatched]));
     }
 
     /**
- * After Win highlight winning position, Dispally Winner and  Game Over notification 
- */
-    endGame(cells, playerNumber) {
-        const winnerBoard = document.getElementById("winnerBoard"); // Show the Game winner name / Draw 
-        const gameEnd = document.getElementById("gameEnd"); // Show Game end
-        this.setMarksDragState();
-        if (cells.length) {
-            for (let i = 0; i < cells.length; i++) {
-                document.getElementById(cells[i].id).parentNode.classList.add("winningCell");
-                if (playerNumber === '1') {
-                    this.player1.win = true;
-                    this.player1.toMove = false;
-                } else {
-                    this.player2.win = true;
-                    this.player2.toMove = false;
-                }
-                winnerBoard.innerHTML = `P${playerNumber} WINS`;
-                gameEnd.innerHTML = "GAME OVER";
-            }
-        } else {
-            winnerBoard.innerHTML = "NO ONE WIN";
-            gameEnd.innerHTML = "GAME OVER";
+     * Handles the `drop` event, updating the board state and UI.
+     * @param {number} row - The row index of the drop.
+     * @param {number} col - The column index of the drop.
+     * @param {Event} event - The drag event.
+     */
+    doDrop(row, col, event) {
+        event.preventDefault();
+        const dropzone = event.target;
+        const draggedElementId = event.dataTransfer.getData('text/plain');
+        const playerNumber = event.dataTransfer.getData('player-number');
+        const draggedMark = event.dataTransfer.getData('mark');
+
+        if (dropzone.innerHTML === '') {
+            const draggedElement = document.getElementById(draggedElementId);
+            dropzone.appendChild(draggedElement);
+            this.moves++;
+            this.boardState[row][col] = draggedMark;
+            this.onMoveCallback(row, col, parseInt(playerNumber));
         }
-
-        this.setMarksDragState();
-
     }
 
+    /**
+     * Sets the draggable state and visual style for the players' marks.
+     * @param {number} activePlayerNumber - The number of the currently active player.
+     */
+    setMarksDragState(activePlayerNumber) {
+        this.players.forEach((player, index) => {
+            const playerNumber = index + 1;
+            const isActive = playerNumber === activePlayerNumber;
+            player.isActive = isActive;
+            const playerBox = document.getElementById(`player${playerNumber}-box`);
 
+            playerBox.querySelector('li').classList.toggle('active-player', isActive);
+
+            playerBox.querySelectorAll('li:not(:first-child)').forEach(elem => {
+                elem.setAttribute('draggable', isActive);
+                elem.classList.toggle('notAllowed', !isActive);
+            });
+        });
+    }
+
+    /* Sets the initial state where all players are active to start the game. */
+    setInitialDragState() {
+        this.players.forEach((player, index) => {
+            const playerBox = document.getElementById(`player${index + 1}-box`);
+            player.isActive = true;
+            playerBox.querySelector('li').classList.add('active-player');
+            playerBox.querySelectorAll('li:not(:first-child)').forEach(elem => {
+                elem.setAttribute('draggable', true);
+            });
+        });
+    }
 }

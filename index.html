@@ -6,47 +6,30 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
-  <body>
+<body>
     <div class="wrapper">
-      <h1 class="header">XO Game</h1>
-      <!-- <div class="board-size">
-        <form>
-          <label>Board Size</label>
-          <label class="radio-inline">
-            <input type="radio" name="board-size" value="3" checked>3
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="board-size" value="4">4
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="board-size" value="5">5
-          </label>
-        </form>
-      </div> -->
-      <div class="gameBoard">
-        <!-- <div class="marks-reserve" id="player1-box"> -->
-        <ul class="marks-reserve" id="player1-box">
-          <li id="player1-logo" class="active-player">P1</li>
-        </ul>
-        <!-- </div> -->
-        <table border="1" id="square-grid"></table>
-        <ul class="marks-reserve" id="player2-box">
-          <li id="player2-logo" class="active-player">P2</li>
-        </ul>
-      </div>
-      <div class="gameResultBoard">
-        <div class="winnerNameBoard">
-          <h1 id="winnerBoard" class="winBoard"></h1>
+        <h1 class="header">XO Game</h1>
+        <div class="gameBoard">
+            <ul class="marks-reserve" id="player1-box">
+                <li id="player1-logo" class="active-player">P1</li>
+            </ul>
+            <table border="1" id="square-grid"></table>
+            <ul class="marks-reserve" id="player2-box">
+                <li id="player2-logo" class="active-player">P2</li>
+            </ul>
         </div>
-        <div class="gameOverNotification">
-          <h1 id="gameEnd"></h1>
+        <div class="gameResultBoard">
+            <div class="winnerNameBoard">
+                <h1 id="winnerBoard" class="winBoard"></h1>
+            </div>
+            <div class="gameOverNotification">
+                <h1 id="gameEnd"></h1>
+            </div>
+            <div class="playAgain">
+                <button name="playAgain">PLAY AGAIN</button>
+            </div>
         </div>
-        <div class="playAgain">
-          <button name="playAgain">PLAY AGAIN</button>
-        </div>
-      </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js" type="module"></script>
     <script src="app.js" type="module"></script>
-  </body>
+</body>
 </html>

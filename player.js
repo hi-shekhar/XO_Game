@@ -1,34 +1,16 @@
+/**
+ * Represents a single player in the game.
+ */
 export class Player {
-    #toMove = true;
-    #win = false;
-    constructor(name, mark, id) {
+    /**
+     * Initializes a new player.
+     * @param {string} name - The player's name (e.g., 'P1').
+     * @param {string} mark - The player's mark (e.g., 'X').
+     */
+    constructor(name, mark) {
         this.name = name;
         this.mark = mark;
-    }
-
-    getName() {
-        return this.name;
-    }
-
-    getMark() {
-        return this.mark;
-    }
-
-    get toMove() {
-        return this.#toMove;
-    }
-
-
-    set toMove(val) {
-        this.#toMove = val;
-    }
-
-    get win() {
-        return this.#win;
-    }
-
-
-    set win(val) {
-        this.#win = val;
+        this.isActive = true;
+        this.win = false;
     }
 }
